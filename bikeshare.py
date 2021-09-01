@@ -2,13 +2,15 @@ import time
 import pandas as pd
 import numpy as np
 
-CITY_DATA = { 'chicago': 'chicago.csv',
-              'new york city': 'new_york_city.csv',
-              'washington': 'washington.csv' }
+CITY_DATA = {'chicago': 'chicago.csv',
+             'new york city': 'new_york_city.csv',
+             'washington': 'washington.csv'}
 
-MONTHS_LIST = [ "all", "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december" ]
+MONTHS_LIST = ["all", "january", "february", "march", "april", "may",
+               "june", "july", "august", "september", "october", "november", "december"]
 
-DAYS_LIST = [ "all", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" ]
+DAYS_LIST = ["all", "monday", "tuesday", "wednesday",
+             "thursday", "friday", "saturday", "sunday"]
 
 
 def get_filters():
@@ -23,13 +25,14 @@ def get_filters():
     print('Hello! Let\'s explore some US bikeshare data!')
     # TO DO: get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
     iscityvalid = False
-    cities_abreviated = { "chg": "chicago", "nyc": "new york city", "wa": "washington" }
-    
+    cities_abreviated = {"chg": "chicago",
+                         "nyc": "new york city", "wa": "washington"}
+
     while not iscityvalid:
-        city = input("Please enter the city (Example: Chicago, New York City, Washington) : ")
+        city = input(
+            "Please enter the city (Example: Chicago, New York City, Washington) : ")
         city = city.lower()
-        
-        
+
         if city in cities_abreviated.values():
             iscityvalid = True
         elif any(city in val for val in cities_abreviated):
@@ -38,39 +41,38 @@ def get_filters():
                     city = cities_abreviated[value]
                     iscityvalid = True
         else:
-            print(f"I'm sorry, please try entering another city as we weren't able to find {city}.\n")
-    
-    
+            print(
+                f"I'm sorry, please try entering another city as we weren't able to find {city}.\n")
+
     # TO DO: get user input for month (all, january, february, ... , june)
     ismonthvalid = False
     while not ismonthvalid:
         month = input("Please enter the month: ")
         month = month.lower()
-        
+
         if any(month in val for val in MONTHS_LIST):
             for value in MONTHS_LIST:
                 if month in value:
                     month = value
                     ismonthvalid = True
         else:
-            print(f"I'm sorry, please try entering another month as we weren't able to find {month}.\n")
-
-            
-        
+            print(
+                f"I'm sorry, please try entering another month as we weren't able to find {month}.\n")
 
     # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
     isdayvalid = False
     while not isdayvalid:
         day = input("Please enter the day: ")
         day = day.lower()
-        
+
         if any(day in val for val in DAYS_LIST):
             for value in DAYS_LIST:
                 if day in value:
                     day = value
                     isdayvalid = True
         else:
-            print(f"I'm sorry, please try entering another day as we weren't able to find {day}.\n")
+            print(
+                f"I'm sorry, please try entering another day as we weren't able to find {day}.\n")
 
     print('-'*40)
     return city, month, day
@@ -92,28 +94,38 @@ def load_data(city, month, day):
     df['Month'] = df['Start Time'].dt.month
     df['Day Of Week'] = df['Start Time'].dt.dayofweek
     df['Hour'] = df['Start Time'].dt.hour
-    df['Start to End'] = "From: " + df['Start Station'] + " To: " + df['End Station']
-    
+    df['Start to End'] = "From: " + \
+        df['Start Station'] + " To: " + df['End Station']
+
     if month != "all":
         df = df[df['Start Time'].dt.month == MONTHS_LIST.index(month)]
-    
+
     if day != "all":
         df = df[df['Start Time'].dt.dayofweek == DAYS_LIST.index(day) - 1]
-    
+
     return df
 
 
 def time_stats(df):
-    """Displays statistics on the most frequent times of travel."""
+    """
+    Displays statistics on the most frequent times of travel.
+
+
+    Args:
+        (Dataframe) df - The dataframe that we display our statistics from.
+
+    """
 
     print('\nCalculating The Most Frequent Times of Travel...\n')
     start_time = time.time()
 
     # TO DO: display the most common month
-    print("The most common month is: " + str(MONTHS_LIST[ df['Month'].mode()[0] ]))
+    print("The most common month is: " +
+          str(MONTHS_LIST[df['Month'].mode()[0]]))
 
     # TO DO: display the most common day of week
-    print("The most common day of week is: " + str(DAYS_LIST[ df['Day Of Week'].mode()[0] + 1]))
+    print("The most common day of week is: " +
+          str(DAYS_LIST[df['Day Of Week'].mode()[0] + 1]))
 
     # TO DO: display the most common start hour
     common_hour = int(df['Hour'].mode()[0])
@@ -124,7 +136,6 @@ def time_stats(df):
     else:
         hour_str = f"{common_hour} A.M."
     print("The most common hour is: " + hour_str)
-    
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -137,13 +148,16 @@ def station_stats(df):
     start_time = time.time()
 
     # TO DO: display most commonly used start station
-    print("The most common start station is: " + str(df['Start Station'].mode()[0]))
+    print("The most common start station is: " +
+          str(df['Start Station'].mode()[0]))
 
     # TO DO: display most commonly used end station
-    print("The most common end station is: " + str(df['End Station'].mode()[0]))
+    print("The most common end station is: " +
+          str(df['End Station'].mode()[0]))
 
     # TO DO: display most frequent combination of start station and end station trip
-    print("The most common end station is: " + str(df['Start to End'].mode()[0]))
+    print("The most common end station is: " +
+          str(df['Start to End'].mode()[0]))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -160,20 +174,22 @@ def trip_duration_stats(df):
     second = total_time % (24 * 3600)
     hour = total_time // 3600
     second %= 3600
-    minute = second // 60    
+    minute = second // 60
     second %= 60
-    
-    print(f"Total travel time is {int(hour)} hours, {int(minute)} minutes, {int(second)} seconds.")
+
+    print(
+        f"Total travel time is {int(hour)} hours, {int(minute)} minutes, {int(second)} seconds.")
 
     # TO DO: display mean travel time
     total_time = df['Trip Duration'].mean()
     second = total_time % (24 * 3600)
     hour = total_time // 3600
     second %= 3600
-    minute = second // 60    
+    minute = second // 60
     second %= 60
-    
-    print(f"Mean travel time is {int(hour)} hours, {int(minute)} minutes, {int(second)} seconds.")
+
+    print(
+        f"Mean travel time is {int(hour)} hours, {int(minute)} minutes, {int(second)} seconds.")
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -186,42 +202,48 @@ def user_stats(df):
     start_time = time.time()
 
     # TO DO: Display counts of user types
-    print("The counts for user types is: " + "\n" + str(df['User Type'].dropna().value_counts()))
+    print("The counts for user types is: " + "\n" +
+          str(df['User Type'].dropna().value_counts()))
 
     # TO DO: Display counts of gender
     if 'Gender' in df.columns:
-        print("\nThe counts for gender types is: " + "\n" + str(df['Gender'].dropna().value_counts()))
-
+        print("\nThe counts for gender types is: " + "\n" +
+              str(df['Gender'].dropna().value_counts()))
 
     # TO DO: Display earliest, most recent, and most common year of birth
     if 'Birth Year' in df.columns:
-        print("\nThe earliest birth year is: " + str(int(df['Birth Year'].dropna().min())))
-        print("\nThe most recent birth year is: " + str(int(df['Birth Year'].dropna().max())))
-        print("\nThe most common birth year is: " + str(int(df['Birth Year'].dropna().mode())))
-
+        print("\nThe earliest birth year is: " +
+              str(int(df['Birth Year'].dropna().min())))
+        print("\nThe most recent birth year is: " +
+              str(int(df['Birth Year'].dropna().max())))
+        print("\nThe most common birth year is: " +
+              str(int(df['Birth Year'].dropna().mode())))
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
-    
+
 def display_raw_data(df):
     """ For displaying raw data """
     i = 0
     # TO DO: convert the user input to lower case using lower() function
-    raw = input("Please enter yes or no to display the raw data: ") 
-    pd.set_option('display.max_columns',200)
+    raw = input("Please enter yes or no to display the raw data: ")
+    pd.set_option('display.max_columns', 200)
 
-    while True:            
+    while True:
         if raw == 'no':
             break
         elif raw == 'yes':
             # TO DO: appropriately subset/slice your dataframe to display next five rows
-            print(df[i:i+5]) 
+            print(df[i:i+5])
             # TO DO: convert the user input to lower case using lower() function
-            raw = input("\nPlease enter yes or no to continue to view the data") 
+            raw = input(
+                "\nPlease enter yes or no to continue to view the data")
             i += 5
         else:
-            raw = input("\nYour input is invalid. Please enter only 'yes' or 'no'\n").lower()
+            raw = input(
+                "\nYour input is invalid. Please enter only 'yes' or 'no'\n").lower()
+
 
 def main():
     while True:
@@ -232,8 +254,7 @@ def main():
         station_stats(df)
         trip_duration_stats(df)
         user_stats(df)
-        
-        
+
         display_raw_data(df)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
@@ -242,4 +263,4 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
+    main()
