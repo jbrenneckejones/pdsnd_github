@@ -14,6 +14,28 @@ DAYS_LIST = ["all", "monday", "tuesday", "wednesday",
              "thursday", "friday", "saturday", "sunday"]
 
 
+def get_hour_minutes_from_seconds(seconds_total):
+    """
+    Gets hours and minutes from seconds total
+
+    Args:
+        (int) seconds_total - our total amount of seconds we will get hours and minutes from
+
+    Returns:
+        (int) hours - total amount of hours
+        (int) minutes - total amount of minutes
+        (int) seconds - total amount of seconds
+
+    """
+    seconds = seconds_total % (24 * 3600)
+    hours = seconds_total // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+
+    return hours, minutes, seconds
+
+
 def get_filters():
     """
     Asks user to specify a city, month, and day to analyze.
@@ -184,22 +206,14 @@ def trip_duration_stats(df):
     # TO DO: display total travel time
     # Taken from https://www.askpython.com/python/examples/convert-seconds-hours-minutes
     total_time = df['Trip Duration'].sum()
-    second = total_time % (24 * 3600)
-    hour = total_time // 3600
-    second %= 3600
-    minute = second // 60
-    second %= 60
+    hour, minute, second = get_hour_minutes_from_seconds(total_time)
 
     print(
         f"Total travel time is {int(hour)} hours, {int(minute)} minutes, {int(second)} seconds.")
 
     # TO DO: display mean travel time
     total_time = df['Trip Duration'].mean()
-    second = total_time % (24 * 3600)
-    hour = total_time // 3600
-    second %= 3600
-    minute = second // 60
-    second %= 60
+    hour, minute, second = get_hour_minutes_from_seconds(total_time)
 
     print(
         f"Mean travel time is {int(hour)} hours, {int(minute)} minutes, {int(second)} seconds.")
