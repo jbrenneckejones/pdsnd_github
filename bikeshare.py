@@ -164,6 +164,8 @@ def time_stats(df):
     # TO DO: display the most common start hour
     common_hour = int(df['Hour'].mode()[0])
     hour_str = ""
+
+    # Check if our hour is greater than 12 then change the string to PM otherwise AM
     if common_hour > 12:
         common_hour = common_hour - 12
         hour_str = f"{common_hour} P.M."
