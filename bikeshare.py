@@ -170,7 +170,13 @@ def station_stats(df):
 
 
 def trip_duration_stats(df):
-    """Displays statistics on the total and average trip duration."""
+    """
+    Displays statistics on the total and average trip duration.
+
+    Args:
+        (Dataframe) df - The dataframe that we display our statistics from.
+
+    """
 
     print('\nCalculating Trip Duration...\n')
     start_time = time.time()
@@ -202,7 +208,12 @@ def trip_duration_stats(df):
 
 
 def user_stats(df):
-    """Displays statistics on bikeshare users."""
+    """
+    Displays statistics on bikeshare users.
+
+    Args:
+        (Dataframe) df - The dataframe that we display our statistics from.
+    """
 
     print('\nCalculating User Stats...\n')
     start_time = time.time()
@@ -230,7 +241,12 @@ def user_stats(df):
 
 
 def display_raw_data(df):
-    """ For displaying raw data """
+    """ 
+    For displaying raw data 
+
+    Args:
+        (Dataframe) df - The dataframe that we display our statistics from.
+    """
     i = 0
     # TO DO: convert the user input to lower case using lower() function
     raw = input("Please enter yes or no to display the raw data: ")
